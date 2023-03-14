@@ -11,5 +11,13 @@
   "license": "ISC",
   "devDependencies": {
     "typescript": "^4.9.5"
+  },
+  "dependencies": {
+    "@types/mongodb": "^4.0.7",
+    "@types/mongoose": "^5.11.97",
+    "csv-stringify": "^6.3.0",
+    "dotenv": "^16.0.3",
+    "mongoose": "^7.0.1",
+    "playwright": "^1.31.2"
   }
 }

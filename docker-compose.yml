@@ -1,0 +1,19 @@
+version: '3.1'
+
+services:
+  allego-scraper-db:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+      MONGO_INITDB_DATABASE: allegro
+      MONGO_USERNAME: admin
+      MONGO_PASSWORD: admin
+    ports:
+      - 27017:27017
+    volumes:
+      - allego-scraper-db:/data/db
+
+volumes:
+  allego-scraper-db:
