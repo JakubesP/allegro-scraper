@@ -3,7 +3,7 @@ import { Offer } from './models/offer';
 import { stringify } from 'csv-stringify';
 import fs from 'fs';
 import { config } from './config';
-import { acceptConsent, getOffers, goToNextPage } from './bot-helpers';
+import { AllegroBot } from './bot';
 
 (async () => {
   // Configure
@@ -18,13 +18,15 @@ import { acceptConsent, getOffers, goToNextPage } from './bot-helpers';
   const contex = await browser.newContext();
   const page = await contex.newPage();
 
-  await page.goto(pageUrl);
-  await acceptConsent(page, buttonActionsDelay);
+  const bot = new AllegroBot(page, buttonActionsDelay);
+
+  await bot.openPage(pageUrl);
+  await bot.acceptConsent();
 
   // Scrape data and save to the database
 
   for (let i = 1; i <= pagesNumber; ++i) {
-    const offers = await getOffers(page);
+    const offers = await bot.getOffers();
     if (!offers.length) throw new Error('Cannot get any offers');
 
     console.log(`Loaded ${offers.length} offers from page ${i}`);
@@ -33,7 +35,7 @@ import { acceptConsent, getOffers, goToNextPage } from './bot-helpers';
       offers.map((offer) => ({ ...offer, extractionTimestamp: timestamp }))
     );
 
-    if (i < pagesNumber) await goToNextPage(page, i, buttonActionsDelay);
+    if (i < pagesNumber) await bot.goToNextPage();
   }
 
   // Retrieve & export data
